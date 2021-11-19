@@ -180,6 +180,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // функция начала тестирования
   const playTest = () => {
     const finalAnswers = [];
+    const obj = {};
     //переменная с номером вопроса
     let numberQuestion = 0;
     // функция рендеринга ответов
@@ -217,6 +218,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       if (numberQuestion === questions.length) {
+        questionTitle.textContent = "";
         nextButton.classList.add("d-none");
         prevButton.classList.add("d-none");
         sendButton.classList.remove("d-none");
@@ -227,9 +229,23 @@ document.addEventListener("DOMContentLoaded", function () {
         <input type="phone" class="form-control" id="numberPhone">
         </div>
         `;
+
+        const numberPhone = document.getElementById("numberPhone");
+        numberPhone.addEventListener("input", (event) => {
+          event.target.value = event.target.value.replace(/[^0-9+-]/, "");
+        });
       }
       if (numberQuestion === questions.length + 1) {
-        formAnswers.textContent = "Спасибо за пройденный тест!";
+        formAnswers.textContent = "Спасибо за тест!";
+        sendButton.classList.add("d-none");
+
+        for (let key in obj) {
+          console.log(key, obj[key]);
+          let newObj = {};
+          newObj[key] = obj[key];
+          finalAnswers.push(newObj);
+        }
+        console.log(finalAnswers);
         setTimeout(() => {
           modalBlock.classList.remove("d-block");
         }, 2000);
@@ -240,7 +256,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const checkAnswer = () => {
       console.log("check");
-      const obj = {};
 
       const inputs = [...formAnswers.elements].filter(
         (input) => input.checked || input.id === "numberPhone"
@@ -253,8 +268,7 @@ document.addEventListener("DOMContentLoaded", function () {
           obj[`Номер телефона`] = input.value;
         }
       });
-      finalAnswers.push(obj);
-      console.log(finalAnswers);
+      //   finalAnswers.push(obj);
     };
 
     // обработчики событий кнопок nex и prev
